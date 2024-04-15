@@ -33,7 +33,7 @@ metadata:
   labels:
     app: web-service-gin
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: web-service-gin
@@ -41,6 +41,7 @@ spec:
     metadata:
       labels:
         app: web-service-gin
+
     spec:
       containers:
       - name: web-service-gin
@@ -48,6 +49,12 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
+        env:
+         - name: API_TOKEN
+           valueFrom:
+             secretKeyRef:
+               name: api-key-secret
+               key: apiKey
         # livenessProbe:           # To check the health of the Pod
         #   httpGet:
         #     path: /health

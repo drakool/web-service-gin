@@ -31,7 +31,7 @@ jobs:
 
     - uses: 'google-github-actions/auth@v2'
       with:
-        workload_identity_provider: 'projects/654873593958/locations/global/workloadIdentityPools/my-identity-pool/providers/my-identity-provider'
+        workload_identity_provider: 'projects/654873593958/locations/global/workloadIdentityPools/my-identity-pool/providers/my-identity-provider2'
         service_account: 'gh-actions-sa@vault-on-cloud-run-419505.iam.gserviceaccount.com'
 
     - uses: 'google-github-actions/create-cloud-deploy-release@v1'

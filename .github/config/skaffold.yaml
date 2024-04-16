@@ -1,0 +1,13 @@
+apiVersion: skaffold/v4beta10
+kind: Config
+metadata:
+  name: web-service-gin
+build:
+  artifacts:
+    - image: web-service-gin
+      docker:
+        dockerfile: Dockerfile
+manifests:
+  rawYaml:
+    - kubernetes/deployment.yaml
+

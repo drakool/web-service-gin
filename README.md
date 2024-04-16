@@ -36,6 +36,15 @@ gcloud iam workload-identity-pools create "my-identity-pool" \
   --display-name="gh actions pool"
 ```
 
+### Get the unique identifier of that pool
+```
+gcloud iam workload-identity-pools describe "${WORKLOAD_IDENTITY_POOL}" \
+  --project="${PROJECT_ID}" \
+  --location="global" \
+  --format="value(name)"
+```
+
+
 ### Creating workload identity provider
 ```
 gcloud iam workload-identity-pools providers create-oidc "my-identity-provider" \
@@ -58,6 +67,9 @@ gcloud iam service-accounts add-iam-policy-binding "my-service-account@${PROJECT
   --role="roles/iam.workloadIdentityUser" \
   --member="principalSet://iam.googleapis.com/projects/1234567890/locations/global/workloadIdentityPools/my-identity-pool/attribute.repository/my-org/my-repo"
 ```
+
+  --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.repository=assertion.repository" \
+
 
 or better yet 
 ```

@@ -13,8 +13,13 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Set up Go
       uses: actions/setup-go@v4
@@ -23,6 +28,20 @@ jobs:
 
     - name: Build
       run: go build -v ./...
+
+    - uses: 'google-github-actions/auth@v2'
+      with:
+        workload_identity_provider: 'projects/654873593958/locations/global/workloadIdentityPools/my-identity-pool/providers/my-identity-provider'
+        service_account: 'gh-actions-sa@vault-on-cloud-run-419505.iam.gserviceaccount.com'
+
+    - uses: 'google-github-actions/create-cloud-deploy-release@v1'
+      with:
+        name: 'web-service-gin'
+        description: 'Add new functionality to web-service-gin'
+        delivery_pipeline: 'web-app-private-targets'
+        region: 'europe-west9'
+        images: 'web-service-gin=europe-west9-docker.pkg.dev/vault-on-cloud-run-419505/web-service-gin/web-service-gin:v1.2.3'
+        source: 'web-service-gin'
 
     #- name: Test
      # run: go test -v ./...

@@ -51,7 +51,10 @@ jobs:
 
       - name: Get tag
         id: get-tag
-        run: echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}
+        #run: echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}
+        run: echo "{name}={value}" >> $GITHUB_STATE
+        run: echo "{name}={value}" >> $GITHUB_OUTPUT
+
 
       - id: docker-push-tagged
         name: Tag Docker image and push to Google Artifact Registry
@@ -59,7 +62,7 @@ jobs:
         with:
           push: true
           tags: |
-             europe-west9-docker.pkg.dev/${{ env.PROJECT_ID }}/ web-service-gin/web-service-gin:${{ steps.get-tag.outputs.short_ref }}
+             europe-west9-docker.pkg.dev/${{ env.PROJECT_ID }}/ web-service-gin/web-service-gin:${{ GITHUB_OUTPUT }}
              europe-west9-docker.pkg.dev/'${{ env.PROJECT_ID }}'/web-service-gin/web-service-gin:latest
       - id: populate-configs
         uses: 73h/gae-app-yaml-replace-env-variables@v0.3

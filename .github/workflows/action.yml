@@ -33,7 +33,7 @@ jobs:
         env:
           PROJECT_ID: vault-on-cloud-run-419505 # TODO: update Google Cloud project id
           GAR_LOCATION: us-central1 # TODO: update Artifact Registry location
-          REGION: europe-west9 # TODO: update Cloud Run service region
+          REGION: us-central1 # TODO: update Cloud Run service region
           APP: web-service-gin
 
         with:
@@ -45,7 +45,7 @@ jobs:
       - name: Login to Artifact Registry
         uses: docker/login-action@v1
         with:
-          registry: europe-west9-docker.pkg.dev
+          registry: us-central1-docker.pkg.dev
           username: oauth2accesstoken
           password: ${{ steps.auth.outputs.access_token }}
 
@@ -62,8 +62,8 @@ jobs:
       #   with:
       #     push: true
       #     tags: |
-      #        europe-west9-docker.pkg.dev/${{ env.PROJECT_ID }}/ web-service-gin/web-service-gin:${{ steps.get-tag.outputs.GITHUB_OUTPUT }}
-      #        europe-west9-docker.pkg.dev/'${{ env.PROJECT_ID }}'/web-service-gin/web-service-gin:latest
+      #        us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/ web-service-gin/web-service-gin:${{ steps.get-tag.outputs.GITHUB_OUTPUT }}
+      #        us-central1-docker.pkg.dev/'${{ env.PROJECT_ID }}'/web-service-gin/web-service-gin:latest
       # - id: populate-configs
       #   uses: 73h/gae-app-yaml-replace-env-variables@v0.3
       #   env:
@@ -83,8 +83,8 @@ jobs:
           name: 'web-service-gin-v1-2-3'
           description: 'Add new functionality to web-service-gin'
           delivery_pipeline: 'web-app-private-targets'
-          region: 'europe-west9'
-          images: 'web-service-gin=europe-west9-docker.pkg.dev/vault-on-cloud-run-419505/web-service-gin/web-service-gin:v1.2.3'
+          region: 'us-central1'
+          images: 'web-service-gin=us-central1-docker.pkg.dev/vault-on-cloud-run-419505/web-service-gin/web-service-gin:v1.2.3'
           source: 'web-service-gin'
       # - id: deploy
       #   name: Deploy Docker image to App Engine

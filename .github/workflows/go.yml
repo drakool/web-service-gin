@@ -29,14 +29,28 @@ jobs:
     - name: Build
       run: go build -v ./...
 
+    - name: 'Checkout'
+      uses: 'actions/checkout@v4'
+
     - uses: 'google-github-actions/auth@v2'
       with:
-        workload_identity_provider: 'projects/654873593958/locations/global/workloadIdentityPools/my-identity-pool/providers/my-identity-provider2'
-        service_account: 'gh-actions-sa@vault-on-cloud-run-419505.iam.gserviceaccount.com'
+        workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
+        service_account: '${{ secrets.WIF_PROVIDER }}'
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v1'
+      with:           
+        project_id: '${{ env.PROJECT_ID }}'
+    - name: 'Docker auth'
+      run: |-
+         gcloud auth configure-docker ${{ env.GAR_LOCATION }}-docker.pkg.dev
+    - name: 'Build and push container'
+      run: |-
+         docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.APP }}/${{ env.APP }}:${{ github.sha }}" ./app
+         docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.APP }}/${{ env.APP }}:${{ github.sha }}"
 
     - uses: 'google-github-actions/create-cloud-deploy-release@v1'
       with:
-        name: 'web-service-gin'
+        name: 'web-service-gin-v1-2-3'
         description: 'Add new functionality to web-service-gin'
         delivery_pipeline: 'web-app-private-targets'
         region: 'europe-west9'

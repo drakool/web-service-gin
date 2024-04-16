@@ -56,31 +56,38 @@ jobs:
         run: echo "{name}={value}" >> $GITHUB_OUTPUT
 
 
-      - id: docker-push-tagged
-        name: Tag Docker image and push to Google Artifact Registry
-        uses: docker/build-push-action@v2
+      # - id: docker-push-tagged
+      #   name: Tag Docker image and push to Google Artifact Registry
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     push: true
+      #     tags: |
+      #        europe-west9-docker.pkg.dev/${{ env.PROJECT_ID }}/ web-service-gin/web-service-gin:${{ steps.get-tag.outputs.GITHUB_OUTPUT }}
+      #        europe-west9-docker.pkg.dev/'${{ env.PROJECT_ID }}'/web-service-gin/web-service-gin:latest
+      # - id: populate-configs
+      #   uses: 73h/gae-app-yaml-replace-env-variables@v0.3
+      #   env:
+      #     SECRET_AUTH_URL: ${{ secrets.SECRET_AUTH_URL }}
+      #     SECRET_DB_USER: ${{ secrets.SECRET_DB_USER }}
+      #     SECRET_DB_PASS: ${{ secrets.SECRET_DB_PASS }}
+      #     SECRET_DB_PORT: ${{ secrets.SECRET_DB_PORT }}
+      #     SECRET_DB_NAME: ${{ secrets.SECRET_DB_NAME }}
+      #     SECRET_DB_HOST: ${{ secrets.SECRET_DB_HOST }}
+      #     SECRET_INSTANCE_UNIX_SOCKET: ${{ secrets.SECRET_INSTANCE_UNIX_SOCKET }}
+      #     SECRET_CLOUD_SQL_INSTANCE: ${{ secrets.SECRET_CLOUD_SQL_INSTANCE }}
+      #     SECRET_SERVICE_API_KEY: ${{ secrets.SECRET_SERVICE_API_KEY }}
+      #   with:
+      #     app_yaml_path: ".github/configs/app.yaml"
+      - uses: 'google-github-actions/create-cloud-deploy-release@v1'
         with:
-          push: true
-          tags: |
-             europe-west9-docker.pkg.dev/${{ env.PROJECT_ID }}/ web-service-gin/web-service-gin:${{ steps.get-tag.outputs.GITHUB_OUTPUT }}
-             europe-west9-docker.pkg.dev/'${{ env.PROJECT_ID }}'/web-service-gin/web-service-gin:latest
-      - id: populate-configs
-        uses: 73h/gae-app-yaml-replace-env-variables@v0.3
-        env:
-          SECRET_AUTH_URL: ${{ secrets.SECRET_AUTH_URL }}
-          SECRET_DB_USER: ${{ secrets.SECRET_DB_USER }}
-          SECRET_DB_PASS: ${{ secrets.SECRET_DB_PASS }}
-          SECRET_DB_PORT: ${{ secrets.SECRET_DB_PORT }}
-          SECRET_DB_NAME: ${{ secrets.SECRET_DB_NAME }}
-          SECRET_DB_HOST: ${{ secrets.SECRET_DB_HOST }}
-          SECRET_INSTANCE_UNIX_SOCKET: ${{ secrets.SECRET_INSTANCE_UNIX_SOCKET }}
-          SECRET_CLOUD_SQL_INSTANCE: ${{ secrets.SECRET_CLOUD_SQL_INSTANCE }}
-          SECRET_SERVICE_API_KEY: ${{ secrets.SECRET_SERVICE_API_KEY }}
-        with:
-          app_yaml_path: ".github/configs/app.yaml"
-
-      - id: deploy
-        name: Deploy Docker image to App Engine
-        uses: google-github-actions/deploy-appengine@v1
-        with:
-          deliverables: '.github/configs/app.yaml'
+          name: 'web-service-gin-v1-2-3'
+          description: 'Add new functionality to web-service-gin'
+          delivery_pipeline: 'web-app-private-targets'
+          region: 'europe-west9'
+          images: 'web-service-gin=europe-west9-docker.pkg.dev/vault-on-cloud-run-419505/web-service-gin/web-service-gin:v1.2.3'
+          source: 'web-service-gin'
+      # - id: deploy
+      #   name: Deploy Docker image to App Engine
+      #   uses: google-github-actions/deploy-appengine@v1
+      #   with:
+      #     deliverables: '.github/configs/app.yaml'

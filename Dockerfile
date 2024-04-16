@@ -47,7 +47,7 @@ RUN ls /app
 #CGO_ENABLED=0 GOOS=linux
 ENV GOCACHE=/root/.cache/go-build
 
-#RUN --mount=type=cache,target="/root/.cache/go-build" go build -v -o /app/gin-service ./...
+RUN go build -v -o /app/gin-service ./...
 
 
 FROM gcr.io/distroless/base-debian10 AS build-release-stage

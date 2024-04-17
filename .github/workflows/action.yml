@@ -84,7 +84,7 @@ jobs:
           description: 'Add new functionality to web-service-gin'
           delivery_pipeline: 'web-app-private-targets'
           region: 'us-central1'
-          images: 'web-service-gin=us-central1-docker.pkg.dev/vault-on-cloud-run-419505/web-service-gin/web-service-gin:v1.2.3'
+          images: 'web-service-gin=us-central1-docker.pkg.dev/vault-on-cloud-run-419505/web-service-gin/web-service-gin:$GITHUB_OUTPUT'
           source: '.'
           #skaffold_file: '../../skaffold.yaml'
       # - id: deploy

@@ -80,7 +80,7 @@ jobs:
       #     app_yaml_path: ".github/configs/app.yaml"
       - uses: 'google-github-actions/create-cloud-deploy-release@v1'
         with:
-          name: 'web-service-gin-v1-2-3'
+          name: 'web-service-gin-$GITHUB_OUTPUT'
           description: 'Add new functionality to web-service-gin'
           delivery_pipeline: 'web-app-private-targets'
           region: 'us-central1'
